@@ -1,15 +1,43 @@
+from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
-from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    categories = Category.objects.order_by('-likes')[:5]
-    cxt = { 'categories': categories }
-    return render(request, 'rango/index.html', cxt)
+
+    cat_list = Category.objects.order_by('-likes')[:10]
+    page_list = Page.objects.order_by('-views')[:10]
+    cxt_dict = {'categories': cat_list, 'pages': page_list}
+
+    visits = int(request.COOKIES.get('visits', 1))
+
+    reset_last_visit_time = False
+    resoponse = render(request, 'rango/index.html', cxt_dict)
+
+    if 'last_visit' in request.COOKIES:
+        last_visit = request.COOKIES['last_visit']
+        last_visit_time = datetime.strptime(last_visit[:-7], '%Y-%m-%d %H:%M:%S')
+
+        # TODO: update this
+        if (datetime.now() - last_visit_time).seconds > 10:
+            visits += 1
+            reset_last_visit_time = True
+    else:
+        reset_last_visit_time = True
+        cxt_dict['visits'] = visits
+        resoponse = render(request, 'rango/index.html', cxt_dict)
+
+    if reset_last_visit_time:
+        resoponse.set_cookie('last_visit', datetime.now())
+        resoponse.set_cookie('visits', visits)
+
+    return resoponse
+
 
 def category(request, name_slug):
     cxt = {}
@@ -55,13 +83,13 @@ def add_page(request, cat_name_slug):
         if form.is_valid():
 
             if form.is_valid():
-                page = form.save(commit=False)    
+                page = form.save(commit=False)
                 page.category = cat
                 page.views = 0
                 page.save()
 
                 return category(request, cat_name_slug)
-            
+
         else:
             print form.errors
     else:
@@ -183,3 +211,5 @@ def user_logout(request):
     return HttpResponseRedirect('/rango/')
 
 
+def about(request):
+    return render(request, 'rango/about.html')

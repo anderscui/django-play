@@ -1,30 +1,29 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Rango</title>
-    </head>
+{% extends 'base.html' %}
+{% load staticfiles %}
 
-    <body>
-        <h1>Add a Page</h1>
+{% block title %}Add a page{% endblock %}
 
-        {% if category %}
-            <form id="page_form" method="post" action="{% url 'add_page' category.slug %}">
-                {% csrf_token %}
+{% block body_block %}
 
-                {% for hidden in form.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
+    <h1>Add a Page</h1>
 
-                {% for field in form.visible_fields %}
-                    {{ field.errors }}
-                    {{ field.help_text }}<br />
-                    {{ field }}<br />
-                {% endfor %}
+    {% if category %}
+        <form id="page_form" method="post" action="{% url 'add_page' category.slug %}">
+            {% csrf_token %}
 
-                <input type="submit" name="submit" value="Add" />
-            </form>
-        {% else %}
-            <p>Sorry, this category does not exist.</p>
-        {% endif %}
-    </body>
-</html>
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}<br />
+                {{ field }}<br />
+            {% endfor %}
+
+            <input type="submit" name="submit" value="Add" />
+        </form>
+    {% else %}
+        <p>Sorry, this category does not exist.</p>
+    {% endif %}
+{% endblock %}
