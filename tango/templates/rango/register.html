@@ -10,20 +10,21 @@
 {% block body_block %}
 
     {% if registered %}
-        Rango says: <strong>thank you for registering!</strong>
-        <a href="{% url 'about' %}">Return to the homepage.</a><br />
+        <strong>Thank you for registering!</strong>
+        <a href="{% url 'index' %}">Return to the homepage.</a><br />
     {% else %}
 
-        <form id="user_form" method="post" action="{% url 'register' %}"
-                enctype="multipart/form-data">
+    <form id="user_form" role="form" method="post" action="{% url 'register' %}"
+            enctype="multipart/form-data">
 
-            {% csrf_token %}
+        {% csrf_token %}
 
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
 
-            <input type="submit" name="submit" value="Register" />
-        </form>
+        <br />
+        <button class="btn btn-primary" type="submit" name="submit">Register</button>
+    </form>
 
     {% endif %}
 

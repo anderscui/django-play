@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block title %}Add a page{% endblock %}
+{% block title %}Add Page{% endblock %}
 
 {% block page_header %}
     <h1>Add Page</h1>
@@ -27,6 +27,7 @@
                 {{ field }}<br />
             {% endfor %}
 
+            <br />
             <button class="btn btn-primary" type="submit" name="submit">Add</button>
         </form>
     {% else %}
