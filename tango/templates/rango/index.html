@@ -3,23 +3,25 @@
 
 {% block title %}Home Page{% endblock %}
 
+{% block page_header %}
+    {% if user.is_authenticated %}
+        <h1>Hello {{ user.username }}...</h1>
+    {% else %}
+        <h1>Hello my friend :-)</h1>
+    {% endif %}
+{% endblock %}
+
 {% block body_block %}
 
-        {% if user.is_authenticated %}
-        <h2>Hello {{ user.username }}...</h2>
-        {% else %}
-        <h2>Hello my friend :-)</h2>
-        {% endif %}
-
-        <h3>Below are the top 5 categories on this site:</h3>
-        {% if categories %}
-            <ul>
-                {% for c in categories %}
-                <li><a href="/rango/category/{{ c.slug }}">{{ c.name }}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no categories present</strong>
-        {% endif %}
+    <h3>Below are the top 10 categories on this site:</h3>
+    {% if categories %}
+        <ul>
+            {% for c in categories %}
+            <li><a href="/rango/category/{{ c.slug }}">{{ c.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <strong>There are no categories present</strong>
+    {% endif %}
 
 {% endblock %}

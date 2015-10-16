@@ -3,8 +3,11 @@
 
 {% block title %}Login{% endblock %}
 
-{% block body_block %}
+{% block page_header %}
     <h1>Login to Rango</h1>
+{% endblock %}
+
+{% block body_block %}
 
     <form id="login_form" method="post" action="/rango/login/">
         {% csrf_token %}

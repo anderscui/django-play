@@ -3,9 +3,11 @@
 
 {% block title %}Add a Category{% endblock %}
 
-{% block body_block %}
-
+{% block page_header %}
     <h1>Add a Category</h1>
+{% endblock %}
+
+{% block body_block %}
 
     <form id="category_form" method="post" action="{% url 'add_category' %}">
         {% csrf_token %}
